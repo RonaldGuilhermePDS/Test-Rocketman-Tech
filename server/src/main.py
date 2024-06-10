@@ -1,9 +1,15 @@
-from typing import Union
+from fastapi import FastAPI, Depends
 
-from fastapi import FastAPI
+from infrastructure.services.pokemon_service import PokemonService
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+pokemon_service = PokemonService()
+
+@app.get("/pokemons")
+async def get_pokemons (
+  offset: int = 0,
+  limit: int = 20,
+  pokemon_service: PokemonService = Depends()
+):
+  return await pokemon_service.list(offset, limit)
