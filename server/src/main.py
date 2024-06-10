@@ -10,21 +10,17 @@ pokemon_service = PokemonService()
 async def get_pokemons (
   offset: int = 0,
   limit: int = 20,
-  pokemon_service: PokemonService = Depends()
 ):
   return await pokemon_service.list(offset, limit)
 
 @app.get("/pokemons/details/{pokemon_name}")
 async def get_pokemon_details(
   pokemon_name: str,
-  pokemon_service: PokemonService = Depends()
 ):
   return await pokemon_service.get_details(pokemon_name)
 
 @app.get("/pokemons/export")
-async def export_pokemons(
-   pokemon_service: PokemonService = Depends()
-):
+async def export_pokemons():
     from xml.etree import ElementTree as ET
 
     root = ET.Element("Pokemons")

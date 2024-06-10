@@ -1,20 +1,23 @@
 from fastapi import HTTPException
 from httpx import AsyncClient
+from asyncio import Semaphore
 
 class PokemonService:
   def __init__(self):
     self.pokemon_list = []
+    self.semaphore = Semaphore(20)
 
   async def fetch(self, offset=0, limit=20):
-    async with AsyncClient() as client:
-      response = await client.get(f"https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={limit}")
+    async with self.semaphore:
+       async with AsyncClient() as client:
+        response = await client.get(f"https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={limit}")
 
-      if response.status_code != 200:
-          raise HTTPException(status_code=400, detail="Error on fetch pokemons")
+        if response.status_code != 200:
+            raise HTTPException(status_code=400, detail="Error on fetch pokemons")
 
-      data = response.json()
+        data = response.json()
 
-      return data["results"]
+        return data["results"]
 
   async def list(self, offset: int = 0, limit: int = 20):
     data = await self.fetch(offset, limit)
@@ -24,7 +27,8 @@ class PokemonService:
     return self.pokemon_list
 
   async def get_details(self, pokemon_name: str):
-    async with AsyncClient() as client:
+    async with self.semaphore:
+      async with AsyncClient() as client:
         response = await client.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}")
 
         if response.status_code != 200:
