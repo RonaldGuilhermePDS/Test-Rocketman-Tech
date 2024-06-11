@@ -4,4 +4,11 @@ export interface IPokemon {
   weight: number;
   types: string[];
   abilities: string[];
+  sprites: {
+    other: {
+      'official-artwork': {
+        front_default: string;
+      };
+    };
+  };
 }

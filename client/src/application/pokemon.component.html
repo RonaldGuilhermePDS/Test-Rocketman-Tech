@@ -1,19 +1,15 @@
-<div class="pokemons-container">
-  <h1>Pokemon List</h1>
+<div class="flex flex-col">
+  <h1 class="text-center">Pokédex</h1>
 
-  <button (click)="exportPokemons()">Export Pokemon</button>
+  <button (click)="exportPokemons()">Export Pokemons</button>
 
-  <div class="pagination-buttons">
-    <button (click)="previousPage()" [disabled]="offset <= 0">Previous</button>
-    <button (click)="nextPage()">Next</button>
-  </div>
-
-  <ul>
-    <li *ngFor="let pokemon of pokemons">
-      <div>
-        <h3>{{ pokemon.name }}</h3>
-        <button (click)="getPokemonDetails(pokemon.name)">See Details</button>
-      </div>
+  <ul class="flex flex-wrap justify-center gap-4 w-4/6 self-center">
+    <li *ngFor="let pokemon of pokemons" class="flex flex-col items-center">
+      <img
+        ngSrc="{{ pokemon.sprites.other['official-artwork'].front_default }}"
+        width="250" height="250"
+      />
+      <span>{{ pokemon.name }}</span>
     </li>
   </ul>
 </div>

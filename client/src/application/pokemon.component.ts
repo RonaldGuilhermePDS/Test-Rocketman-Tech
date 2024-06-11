@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgFor } from '@angular/common';
+import { NgFor, NgOptimizedImage } from '@angular/common';
 import { IPokemon } from '../domain/pokemon.model';
 import { PokemonService } from '../infrastructure/services/pokemon_service';
 import { saveAs } from 'file-saver';
@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgFor],
+  imports: [RouterOutlet, NgFor, NgOptimizedImage],
   templateUrl: './pokemon.component.html',
 })
 export class PokemonsComponent implements OnInit {
@@ -54,17 +54,5 @@ export class PokemonsComponent implements OnInit {
         console.error("Error on Export Pokemons", error);
       }
     );
-  }
-
-  nextPage(): void {
-    this.offset += this.limit;
-    this.fetchPokemons();
-  }
-
-  previousPage(): void {
-    if (this.offset > 0) {
-      this.offset -= this.limit;
-      this.fetchPokemons();
-    }
   }
 }
