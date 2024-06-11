@@ -1,10 +1,16 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from infrastructure.services.pokemon_service import PokemonService
 
 app = FastAPI()
 
 pokemon_service = PokemonService()
+
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=["*"],
+)
 
 @app.get("/pokemons")
 async def get_pokemons (
