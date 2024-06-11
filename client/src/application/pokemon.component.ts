@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { NgFor, NgOptimizedImage } from '@angular/common';
+import { Router } from '@angular/router';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { IPokemon } from '../domain/pokemon.model';
 import { PokemonService } from '../infrastructure/services/pokemon_service';
 import { saveAs } from 'file-saver';
 
 @Component({
-  selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgFor, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage],
+  selector: 'app-pokemons',
   templateUrl: './pokemon.component.html',
 })
 export class PokemonsComponent implements OnInit {
@@ -16,7 +16,10 @@ export class PokemonsComponent implements OnInit {
   offset: number = 0;
   limit: number = 20;
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(
+    private route: Router,
+    private pokemonService: PokemonService,
+  ) {}
 
   ngOnInit(): void {
     this.fetchPokemons();
@@ -50,5 +53,9 @@ export class PokemonsComponent implements OnInit {
   loadMore(): void {
     this.offset += this.limit;
     this.fetchPokemons();
+  }
+
+  viewPokemonDetails(name: string): void {
+    this.route.navigate(['/pokemon', name]);
   }
 }

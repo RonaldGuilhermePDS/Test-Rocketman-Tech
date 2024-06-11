@@ -1,0 +1,33 @@
+<div *ngIf="notFound; else pokemonDetails">
+  <p>Pokemon not found</p>
+</div>
+
+<ng-template #pokemonDetails>
+  <h1 class="text-center text-orange-500 text-2xl font-semibold">{{ pokemon.name.toUpperCase() }} Details</h1>
+
+  <div class="flex flex-col justify-center items-center space-y-3">
+    <img
+      ngSrc="{{ pokemon.sprites.other['official-artwork'].front_default }}"
+      priority
+      width="250" height="250"
+      class="my-2 border-2 border-orange-500"
+    />
+
+    <p class="font-semibold text-xl">Height: {{ pokemon.height }}</p>
+    <p class="font-semibold text-xl">Weight: {{ pokemon.weight }}</p>
+
+    <p class="font-semibold text-xl">Types: </p>
+    <ul class="flex space-x-3">
+      <li *ngFor="let type of pokemon.types" class="p-2 text-orange-500 font-semibold border-2 border-orange-500 text-xl">
+        {{ type.type.name.toUpperCase() }}
+      </li>
+    </ul>
+
+    <p class="font-semibold text-xl">Abilities: </p>
+    <ul class="flex space-x-3">
+      <li *ngFor="let ability of pokemon.abilities" class="p-2 text-orange-500 font-semibold border-2 border-orange-500 text-xl">
+        {{ ability.ability.name.toUpperCase() }}
+    </ul>
+  </div>
+</ng-template>
+

@@ -2,8 +2,16 @@ export interface IPokemon {
   name: string;
   height: number;
   weight: number;
-  types: string[];
-  abilities: string[];
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
+  abilities: {
+    ability: {
+      name: string;
+    };
+  }[];
   sprites: {
     other: {
       'official-artwork': {
