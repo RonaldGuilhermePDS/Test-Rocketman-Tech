@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from infrastructure.services.pokemon_service import PokemonService
+from src.infrastructure.services.pokemon_service import PokemonService
 
 import io
 import yaml
