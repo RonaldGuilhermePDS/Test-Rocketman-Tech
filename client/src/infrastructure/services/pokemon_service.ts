@@ -7,12 +7,12 @@ import { IPokemon } from '../../domain/pokemon.model';
   providedIn: 'root',
 })
 export class PokemonService {
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = 'http://localhost:4300';
 
   constructor(private http: HttpClient) {}
 
   listPokemons(offset: number, limit: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/pokemons/?offset=${offset}&limit=${limit}`);
+    return this.http.get(`${this.apiUrl}/pokemons?offset=${offset}&limit=${limit}`);
   }
 
   getPokemonDetails(pokemonName: string): Observable<any> {
