@@ -1,0 +1,30 @@
+services:
+  client:
+    container_name: client
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    networks:
+      - default
+    links:
+      - server
+    ports:
+      - "4200:80"
+    depends_on:
+      - server
+
+  server:
+    container_name: server
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    networks:
+      - default
+    ports:
+      - "4300:4300"
+
+networks:
+  default:
+    driver: bridge
