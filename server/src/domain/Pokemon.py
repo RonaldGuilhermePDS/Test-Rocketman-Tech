@@ -5,12 +5,12 @@ class IPokemon(BaseModel):
   name: str
   height: int
   weight: int
-  types: list[str]
-  abilities: list[str]
+  types: Dict[str, Dict[str, str]]
+  abilities: Dict[str, Dict[str, str]]
   sprites: Dict[str, Dict[str, Dict[str, str]]] = {
     'other': {
       'official-artwork': {
-        'front_default': str
+        'front_default': str()
       }
     }
   }
