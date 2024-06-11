@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from infrastructure.services.pokemon_service import PokemonService
+
+import io
+import yaml
 
 app = FastAPI()
 
@@ -10,6 +13,7 @@ pokemon_service = PokemonService()
 app.add_middleware(
   CORSMiddleware,
   allow_origins=["*"],
+  allow_methods=["*"],
 )
 
 @app.get("/pokemons")
@@ -25,26 +29,16 @@ async def get_pokemon_details(
 ):
   return await pokemon_service.fetch_pokemons_details(pokemon_name)
 
-@app.get("/pokemons/export")
-async def export_pokemons():
-    from xml.etree import ElementTree as ET
+@app.post("/pokemons/export")
+async def export_pokemons(body: dict):
+  pokemons = body['pokemons']
 
-    root = ET.Element("Pokemons")
+  yaml_string = yaml.dump(pokemons, allow_unicode=True)
 
-    pokemons = await pokemon_service.list_pokemons(0, 20)
+  buffer = io.BytesIO()
+  buffer.write(yaml_string.encode('utf-8'))
+  buffer.seek(0)
 
-    for pokemon in pokemons:
-        pokemon_elem = ET.SubElement(root, "Pokemon")
-        ET.SubElement(pokemon_elem, "Name").text = pokemon["name"]
-        ET.SubElement(pokemon_elem, "Height").text = str(pokemon["height"])
-        ET.SubElement(pokemon_elem, "Weight").text = str(pokemon["weight"])
-        ET.SubElement(pokemon_elem, "Types").text = ", ".join(pokemon["types"])
-        ET.SubElement(pokemon_elem, "Abilities").text = ", ".join(pokemon["abilities"])
-        ET.SubElement(pokemon_elem, "sprites").text = ", ".join(pokemon["sprites"])
+  response = Response(content=buffer.read(), media_type='application/x-yaml')
 
-    tree = ET.ElementTree(root)
-
-    with open("pokemons.xml", "wb") as f:
-        tree.write(f)
-
-    return {"message": "Export Successful"}
+  return response
