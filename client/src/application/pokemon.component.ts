@@ -25,11 +25,8 @@ export class PokemonsComponent implements OnInit {
   fetchPokemons(): void {
     this.pokemonService.listPokemons(this.offset, this.limit).subscribe(
       (data: any) => {
-        this.pokemons = data;
+        this.pokemons = [...this.pokemons, ...data]
       },
-      (error: any) => {
-        console.error("Error on fetch pokemons:", error);
-      }
     );
   }
 
@@ -38,9 +35,6 @@ export class PokemonsComponent implements OnInit {
       (data: any) => {
         console.log("Pokemon Details: ", data);
       },
-      (error: any) => {
-        console.error("Error on get pokemon details:", error);
-      }
     );
   }
 
@@ -50,9 +44,11 @@ export class PokemonsComponent implements OnInit {
         const blob = new Blob([response], { type: 'application/xml' });
         saveAs(blob, 'pokemons.xml');
       },
-      (error: any) => {
-        console.error("Error on Export Pokemons", error);
-      }
     );
+  }
+
+  loadMore(): void {
+    this.offset += this.limit;
+    this.fetchPokemons();
   }
 }
