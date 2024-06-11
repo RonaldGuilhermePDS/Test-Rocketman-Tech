@@ -39,7 +39,7 @@ export class PokemonsComponent implements OnInit {
   }
 
   exportPokemons(): void {
-    this.pokemonService.exportPokemons().subscribe(
+    this.pokemonService.exportPokemons(this.pokemons).subscribe(
       (response: any) => {
         const blob = new Blob([response], { type: 'application/xml' });
         saveAs(blob, 'pokemons.xml');
