@@ -1,0 +1,21 @@
+<div class="pokemons-container">
+  <h1>Pokemon List</h1>
+
+  <button (click)="exportPokemons()">Export Pokemon</button>
+
+  <div class="pagination-buttons">
+    <button (click)="previousPage()" [disabled]="offset <= 0">Previous</button>
+    <button (click)="nextPage()">Next</button>
+  </div>
+
+  <ul>
+    <li *ngFor="let pokemon of pokemons">
+      <div>
+        <h3>{{ pokemon.name }}</h3>
+        <button (click)="getPokemonDetails(pokemon.name)">See Details</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<router-outlet></router-outlet>
