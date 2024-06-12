@@ -22,14 +22,14 @@ class PokemonService:
   async def list_pokemons(self, offset: int = 0, limit: int = 20):
     pokemons = await self.fetch_pokemons_data(offset, limit)
 
-    tasks = [self.fetch_pokemons_details(pokemon["name"]) for pokemon in pokemons]
+    tasks = [self.fet_pokemon_details(pokemon["name"]) for pokemon in pokemons]
     results = await gather(*tasks)
 
     self.pokemon_list = sorted(results, key=lambda x: x["name"])
 
     return self.pokemon_list
 
-  async def fetch_pokemons_details(self, pokemon_name: str):
+  async def fet_pokemon_details(self, pokemon_name: str):
     async with self.semaphore:
       async with AsyncClient() as client:
         response = await client.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}")

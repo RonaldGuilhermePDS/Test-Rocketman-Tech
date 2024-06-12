@@ -3,9 +3,11 @@ import yaml
 
 from fastapi import FastAPI, Depends, Response
 from fastapi.middleware.cors import CORSMiddleware
-from src.infrastructure.services.pokemon_service import PokemonService
+
 from src.main.factories.make_get_pokemons_factory import MakeGetPokemonsFactory
-from src.presentation.controllers.get_pokemons_controller import GetPokemonsController
+from src.main.factories.make_get_pokemon_details_factory import MakeGetPokemonDetailsFactory
+
+from src.infrastructure.services.pokemon_service import PokemonService
 
 
 app = FastAPI()
@@ -21,13 +23,16 @@ app.add_middleware(
 async def get_pokemons(
   offset: int = 0,
   limit: int = 20,
-  controller: GetPokemonsController = Depends(MakeGetPokemonsFactory)
+  controller = Depends(MakeGetPokemonsFactory)
   ):
   return await controller.handle(offset, limit)
 
 @app.get("/pokemons/details/{pokemon_name}")
-async def get_pokemon_details(pokemon_name: str):
-  return await pokemon_service.fetch_pokemons_details(pokemon_name)
+async def get_pokemon_details(
+  pokemon_name: str,
+  controller = Depends(MakeGetPokemonDetailsFactory)
+  ):
+  return await controller.handle(pokemon_name)
 
 @app.post("/pokemons/export")
 async def export_pokemons(body: dict):
