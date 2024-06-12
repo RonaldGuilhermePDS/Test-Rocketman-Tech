@@ -1,4 +1,4 @@
-<div *ngIf="loading; else pokemonsList" class="flex justify-center items-center h-screen">
+<div *ngIf="globalLoading; else pokemonsList" class="flex justify-center items-center h-screen">
   <hlm-spinner size="lg" />
 </div>
 
@@ -9,7 +9,7 @@
       <button (click)="exportPokemons()" class="bg-orange-500 text-md text-white font-semibold p-2 rounded-md">Export Pokemons</button>
     </div>
 
-    <ul class="flex flex-wrap justify-center gap-4 w-4/6 self-center" *ngIf="!loading">
+    <ul class="flex flex-wrap justify-center gap-4 w-4/6 self-center" *ngIf="!globalLoading">
       <li *ngFor="let pokemon of pokemons">
         <a (click)="viewPokemonDetails(pokemon.name)" class="flex flex-col items-center border-2 border-orange-500">
           <img
@@ -22,6 +22,13 @@
       </li>
     </ul>
 
-    <button (click)="loadMore()" class="self-center w-1/6 bg-orange-500 text-md text-white font-semibold p-2 my-2 rounded-md" [disabled]="loading">Load More</button>
+    <button (click)="loadMore()" class="self-center w-1/6 bg-orange-500 text-md text-white font-semibold p-2 my-2 rounded-md" [disabled]="globalLoading">
+      <div *ngIf="loadMoreLoading; else loadMoreText">
+        <hlm-spinner size="xs" />
+      </div>
+      <ng-template #loadMoreText>
+        Load More
+      </ng-template>
+    </button>
   </div>
 </ng-template>

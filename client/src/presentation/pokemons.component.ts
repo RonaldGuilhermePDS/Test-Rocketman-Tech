@@ -6,36 +6,36 @@ import { PokemonService } from '../infrastructure/services/pokemon_service';
 import { saveAs } from 'file-saver';
 
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   standalone: true,
   imports: [CommonModule, NgOptimizedImage, HlmSpinnerComponent],
   selector: 'app-pokemons',
-  templateUrl: './pokemon.component.html',
+  templateUrl: './pokemons.component.html',
 })
 export class PokemonsComponent implements OnInit {
   pokemons: IPokemon[] = [];
   offset: number = 0;
   limit: number = 20;
-  loading: boolean = false;
+  globalLoading: boolean = false;
+  loadMoreLoading: boolean = false;
 
   constructor(
     private route: Router,
     private pokemonService: PokemonService,
   ) {}
 
-  ngOnInit(): void {
-    this.fetchPokemons();
+  async ngOnInit(): Promise<void> {
+    this.globalLoading = true;
+    await this.fetchPokemons()
+    this.globalLoading = false
   }
 
-  fetchPokemons(): void {
-    this.loading = true
-    this.pokemonService.listPokemons(this.offset, this.limit).subscribe(
-      (data: any) => {
-        this.pokemons = [...this.pokemons, ...data];
-        this.loading = false;
-      },
-    );
+  async fetchPokemons(): Promise<any> {
+    const pokemons = await firstValueFrom(this.pokemonService.listPokemons(this.offset, this.limit));
+
+    this.pokemons = this.pokemons.concat(pokemons);
   }
 
   getPokemonDetails(pokemonName: string): void {
@@ -55,9 +55,12 @@ export class PokemonsComponent implements OnInit {
     );
   }
 
-  loadMore(): void {
+  async loadMore(): Promise<void> {
     this.offset += this.limit;
-    this.fetchPokemons();
+
+    this.loadMoreLoading = true;
+    await this.fetchPokemons();
+    this.loadMoreLoading = false
   }
 
   viewPokemonDetails(name: string): void {
