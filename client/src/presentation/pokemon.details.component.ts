@@ -15,7 +15,7 @@ import { HlmSpinnerModule } from '@spartan-ng/ui-spinner-helm';
 })
 export class PokemonDetailsComponent implements OnInit {
     pokemon: IPokemon = {} as IPokemon;
-    notFound: boolean = true;
+    notFound: boolean = false;
     loading: boolean = true;
 
     constructor(
@@ -37,9 +37,15 @@ export class PokemonDetailsComponent implements OnInit {
     getPokemonDetails(name: string): void {
       this.pokemonService
       .getPokemonDetails(name)
-      .subscribe((pokemon) => {
-        this.pokemon = pokemon;
-        this.loading = false;
-      });
+      .subscribe(
+        (pokemon) => {
+          this.pokemon = pokemon;
+          this.loading = false;
+        },
+        () => {
+          this.notFound = true;
+          this.loading = false;
+        }
+      );
     }
 }

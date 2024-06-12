@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
     networks:
       - default
-    links:
-      - server
     ports:
       - "4200:80"
     depends_on:
