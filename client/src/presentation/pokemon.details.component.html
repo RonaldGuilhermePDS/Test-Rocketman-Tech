@@ -1,8 +1,14 @@
-<div *ngIf="notFound; else pokemonDetails">
-  <p>Pokemon not found</p>
+<div *ngIf="loading; else pokemonDetails" class="flex justify-center items-center h-screen">
+  <hlm-spinner size="lg" />
 </div>
 
-<ng-template #pokemonDetails>
+<ng-template #pokemonDetails >
+  <div *ngIf="notFound; else pokemonCard" class="flex justify-center items-center h-screen">
+    <h1 class="text-orange-500 text-2xl font-semibold">Not found</h1>
+  </div>
+</ng-template>
+
+<ng-template #pokemonCard>
   <h1 class="text-center text-orange-500 text-2xl font-semibold">{{ pokemon.name.toUpperCase() }} Details</h1>
 
   <div class="flex flex-col justify-center items-center space-y-3">

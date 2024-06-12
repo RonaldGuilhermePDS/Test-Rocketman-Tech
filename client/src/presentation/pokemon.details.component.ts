@@ -5,16 +5,18 @@ import { PokemonService } from '../infrastructure/services/pokemon_service';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { HlmSpinnerModule } from '@spartan-ng/ui-spinner-helm';
 
 @Component({
   standalone: true,
-    imports: [CommonModule, NgOptimizedImage],
+    imports: [CommonModule, NgOptimizedImage, HlmSpinnerModule],
     selector: 'app-pokemon-details',
     templateUrl: './pokemon.details.component.html',
 })
 export class PokemonDetailsComponent implements OnInit {
     pokemon: IPokemon = {} as IPokemon;
-    notFound: boolean = false;
+    notFound: boolean = true;
+    loading: boolean = true;
 
     constructor(
       private activatedRoute: ActivatedRoute,
@@ -22,6 +24,7 @@ export class PokemonDetailsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+      this.loading = true;
       const name = this.activatedRoute.params.pipe(map((params) => params['name']));
 
       if (!name) {
@@ -36,6 +39,7 @@ export class PokemonDetailsComponent implements OnInit {
       .getPokemonDetails(name)
       .subscribe((pokemon) => {
         this.pokemon = pokemon;
+        this.loading = false;
       });
     }
 }
