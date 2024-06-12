@@ -5,9 +5,11 @@ import { IPokemon } from '../domain/pokemon.model';
 import { PokemonService } from '../infrastructure/services/pokemon_service';
 import { saveAs } from 'file-saver';
 
+import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
+
 @Component({
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage, HlmSpinnerComponent],
   selector: 'app-pokemons',
   templateUrl: './pokemon.component.html',
 })
@@ -15,6 +17,7 @@ export class PokemonsComponent implements OnInit {
   pokemons: IPokemon[] = [];
   offset: number = 0;
   limit: number = 20;
+  loading: boolean = false;
 
   constructor(
     private route: Router,
@@ -26,9 +29,11 @@ export class PokemonsComponent implements OnInit {
   }
 
   fetchPokemons(): void {
+    this.loading = true
     this.pokemonService.listPokemons(this.offset, this.limit).subscribe(
       (data: any) => {
-        this.pokemons = [...this.pokemons, ...data]
+        this.pokemons = [...this.pokemons, ...data];
+        this.loading = false;
       },
     );
   }
